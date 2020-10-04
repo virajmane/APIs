@@ -6,3 +6,4 @@ flask-cors
 pyDes
 bs4
 pycricbuzz
+cryptography
