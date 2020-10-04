@@ -19,7 +19,7 @@ def webtopdf():
     url = request.args.get('url')
     webtopdf_api = "05c0b0d5b1077237d91512b78724700dac85fa83ae7a527f4b858ef52f7dbf91"
     burl = f"https://api.html2pdf.app/v1/generate?apiKey={webtopdf_api}&url={url}"
-    return wget.download(burl, out="HTMLtoPDF.pdf")
+    return f"<a href={burl} download>Click Here</a>"
 
 @app.route("/ifsc/", methods=['GET'])
 def ifsc():
