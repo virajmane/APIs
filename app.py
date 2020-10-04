@@ -5,6 +5,7 @@ from pyDes import *
 import base64
 import re
 import bs4
+from pycricbuzz import Cricbuzz
 
 app = Flask(__name__)
 
@@ -26,7 +27,7 @@ def ifsc():
     result = requests.get(base_url).json()
     return result
 
-@app.route("/random", methods=['GET'])
+@app.route("/random/", methods=['GET'])
 def RandomPerson():
     base_url = "https://pipl.ir/v1/getPerson"
     result = requests.get(base_url).json()
@@ -92,6 +93,20 @@ def corona():
     result = {"Active Cases ": res[0],
     "Death Cases ": res[1],
     "Recovered ": res[3]}
+    return jsonify(result)
+
+@app.route("/cricket/", methods=['GET'])
+def cricket():
+    c = Cricbuzz()
+    match = c.matches()
+    mid = (match[0]['id'])
+    livescore = c.livescore(mid=mid)
+    scorecard = c.scorecard(mid=mid)
+    matchinfo = c.matchinfo(mid=mid)
+    commentary = c.commentary(mid=mid)
+
+    result = {"matches": match, "livescore": livescore, "scorecard": scorecard, "matchinfo": matchinfo,
+              "commentary": commentary}
     return jsonify(result)
 
 if __name__ == "__main__":
