@@ -6,6 +6,7 @@ import base64
 import re
 import bs4
 from pycricbuzz import Cricbuzz
+from cryptography.fernet import Fernet
 
 app = Flask(__name__)
 
@@ -108,6 +109,40 @@ def cricket():
     result = [{"matches": match, "livescore": livescore, "scorecard": scorecard, "matchinfo": matchinfo,
               "commentary": commentary}]
     return result
+
+@app.route("/message/", methods=['GET'])
+def endecy():
+    encr_msg = request.args.get("encrypt")
+    decr_msg = request.args.get("decrypt")
+
+    def keygen():
+        key = Fernet.generate_key()
+        return key
+
+    def encrypt(message):
+        key = keygen()
+        en_msg = message.encode()
+        f = Fernet(key)
+        result = f.encrypt(en_msg)
+        final = "{} {}".format(result,key)
+        return final
+    def decrypt(message):
+        try:
+            en_msg,key = message.split("' b'")
+            en_msg = bytes(en_msg[1:], 'utf-8')
+            key = bytes(key[:-1], 'utf-8')
+            f = Fernet(key)
+            result = f.decrypt(en_msg)
+            ultimate =  result.decode('utf-8')
+            return ultimate
+        except ValueError:
+            print("Incorrect Values")
+
+    if encr_msg==None and decr_msg!=None:
+        res = {"decrypted_message": decrypt(decr_msg)}
+    elif decr_msg==None and encr_msg!=None:
+        res = {"encrypted_message": encrypt(encr_msg)}
+    return jsonify(res)
 
 if __name__ == "__main__":
     app.debug = True
