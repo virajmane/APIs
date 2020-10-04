@@ -107,7 +107,7 @@ def cricket():
 
     result = {"matches": match, "livescore": livescore, "scorecard": scorecard, "matchinfo": matchinfo,
               "commentary": commentary}
-    return jsonify(result)
+    return result
 
 if __name__ == "__main__":
     app.debug = True
