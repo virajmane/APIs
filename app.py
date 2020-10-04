@@ -41,7 +41,7 @@ def URLShortner():
     result = requests.post(base_url, data=exp).json()
     return result
 
-@app.route("/api/movie/", methods=['GET'])
+@app.route("/movie/", methods=['GET'])
 def Movie():
     query = request.args.get("query")
     base_url = f"http://www.omdbapi.com/?apikey=fc5d782f&s={query}"
@@ -105,8 +105,8 @@ def cricket():
     matchinfo = c.matchinfo(mid=mid)
     commentary = c.commentary(mid=mid)
 
-    result = {"matches": match, "livescore": livescore, "scorecard": scorecard, "matchinfo": matchinfo,
-              "commentary": commentary}
+    result = [{"matches": match, "livescore": livescore, "scorecard": scorecard, "matchinfo": matchinfo,
+              "commentary": commentary}]
     return result
 
 if __name__ == "__main__":
