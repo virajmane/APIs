@@ -1,5 +1,5 @@
 import wget
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import requests
 from pyDes import *
 import base64
@@ -10,27 +10,27 @@ app = Flask(__name__)
 def index():
     return """<span style="font-family: verdana; font-size: large;">Welcome to APIs</span><div><br /></div><div>Here you will get some free APIs. Feel free to use</div><div><br /></div><div><ul><li>WebToPDF: Converts web pages into PDF</li></ul></div>"""
 
-@app.route("/api/webtopdf/", methods=['GET'])
+@app.route("/webtopdf/", methods=['GET'])
 def webtopdf():
     url = request.args.get('url')
     webtopdf_api = "05c0b0d5b1077237d91512b78724700dac85fa83ae7a527f4b858ef52f7dbf91"
     burl = f"https://api.html2pdf.app/v1/generate?apiKey={webtopdf_api}&url={url}"
     return wget.download(burl, out="HTMLtoPDF.pdf")
 
-@app.route("/api/ifsc/", methods=['GET'])
+@app.route("/ifsc/", methods=['GET'])
 def ifsc():
     query = request.args.get('query')
     base_url = f"https://ifsc.razorpay.com/{query}"
     result = requests.get(base_url).json()
     return result
 
-@app.route("/api/random", methods=['GET'])
+@app.route("/random", methods=['GET'])
 def RandomPerson():
     base_url = "https://pipl.ir/v1/getPerson"
     result = requests.get(base_url).json()
     return result
 
-@app.route("/api/url/", methods=['GET'])
+@app.route("/url/", methods=['GET'])
 def URLShortner():
     query = request.args.get('url')
     exp = {"url": query}
@@ -45,7 +45,7 @@ def Movie():
     result = requests.get(base_url).json()
     return result
 
-@app.route("/api/songs/", methods=['GET'])
+@app.route("/songs/", methods=['GET'])
 def Songs():
     song_name = request.args.get('query')
     des_cipher = des(b"38346591", ECB, b"\0\0\0\0\0\0\0\0", pad=None, padmode=PAD_PKCS5)
@@ -71,7 +71,7 @@ def Songs():
                                            "Artist": song["albums"]["data"][i]["music"],
                                            "Description": song["albums"]["data"][i]["description"],
                                            "URL": urls[i]}
-    return f"<code>{songs_list}</code>"
+    return jsonify(songs_list)
 
 if __name__ == "__main__":
     app.debug = True
