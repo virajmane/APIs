@@ -3,6 +3,8 @@ from flask import Flask, request, jsonify
 import requests
 from pyDes import *
 import base64
+import re
+import bs4
 
 app = Flask(__name__)
 
@@ -72,6 +74,25 @@ def Songs():
                                            "Description": song["albums"]["data"][i]["description"],
                                            "URL": urls[i]}
     return jsonify(songs_list)
+
+@app.route("/corona/", methods=['GET'])
+def corona():
+    country = request.args.get("query")
+    exp = re.compile("(\d.*[0-9])")
+    base_url = f"https://www.worldometers.info/coronavirus/country/{country.lower()}/"
+    req = requests.get(base_url)
+    bs = bs4.BeautifulSoup(req.text, 'html.parser')
+    soup = bs.find_all("div", class_='maincounter-number')
+    a = []
+    for i in soup:
+        a.append(str(i))
+    res = []
+    for i in a:
+        res += exp.findall(i)
+    result = {"Active Cases ": res[0],
+    "Death Cases ": res[1],
+    "Recovered ": res[3]}
+    return jsonify(result)
 
 if __name__ == "__main__":
     app.debug = True
