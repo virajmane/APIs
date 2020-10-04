@@ -4,3 +4,5 @@ requests
 wget
 flask-cors
 pyDes
+re
+bs4
