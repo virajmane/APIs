@@ -45,12 +45,8 @@ def Movie():
     result = requests.get(base_url).json()
     return result
 
-@app.route("/")
-def index():
-    return "<h>Welcome to songs</h>"
-
 @app.route("/api/songs/", methods=['GET'])
-def api():
+def Songs():
     song_name = request.args.get('query')
     des_cipher = des(b"38346591", ECB, b"\0\0\0\0\0\0\0\0", pad=None, padmode=PAD_PKCS5)
     search_base_url = "https://www.jiosaavn.com/api.php?__call=autocomplete.get&_format=json&_marker=0&cc=in&includeMetaTags=1&query="
