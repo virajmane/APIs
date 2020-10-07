@@ -156,7 +156,7 @@ def generate():
     result["mail"] = mail[0]
     return jsonify(result)
 
-@app.route("/mail/", methods=["GET"])
+@app.route("/mail/msg/", methods=["GET"])
 def msg():
     mail = str(request.args.get("email"))
     sep_data = mail.split("@")
