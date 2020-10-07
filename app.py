@@ -144,6 +144,40 @@ def endecy():
         res = {"encrypted_message": encrypt(encr_msg)}
     return jsonify(res)
 
+@app.route("/mail/")
+def mail():
+    return "Mail API is working"
+
+@app.route("/mail/gen/")
+def generate():
+    base_url = "https://www.1secmail.com/api/v1/?action=genRandomMailbox"
+    mail = list(requests.get(base_url).json())
+    result = {}
+    result["mail"] = mail[0]
+    return jsonify(result)
+
+@app.route("/mail/", methods=["GET"])
+def msg():
+    mail = str(request.args.get("email"))
+    sep_data = mail.split("@")
+    username = sep_data[0]
+    domain = sep_data[1]
+    req = (requests.get(f"https://www.1secmail.com/api/v1/?action=getMessages&login={username}&domain={domain}").json())
+    count=1
+    req_new = {}
+    for i in req:
+        req_new[f"msg{count}"] = i
+        count+=1
+    msg_id = []
+    for i in range(0,count-1):
+        msg_id.append(req[i]["id"])
+    final = {}
+    count2 = 1
+    for i in msg_id:
+        final[f"msg{count2}"] = requests.get(f"https://www.1secmail.com/api/v1/?action=readMessage&login={username}&domain={domain}&id={int(i)}").json()
+        count2+=1
+    return jsonify(final)
+
 if __name__ == "__main__":
     app.debug = True
     app.run(host='0.0.0.0', port=5000, use_reloader=True, threaded=True)
