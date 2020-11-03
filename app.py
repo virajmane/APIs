@@ -194,7 +194,8 @@ def instagram():
         url += "?__a=1"
         r = requests.get(url).json()
         result = r["graphql"]["user"]["profile_pic_url_hd"]
-    final = {"url":result}
+    final = {}
+    final["url"] = result
     return jsonify(final)
 
 if __name__ == "__main__":
