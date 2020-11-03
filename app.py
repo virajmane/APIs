@@ -178,9 +178,9 @@ def msg():
         count2+=1
     return jsonify(final)
 
-@app.route("/insta/", methods=["GET"])
+@app.route("/insta/<str:url>"])
 def instagram():
-    url1 = str(request.args.get("url"))
+    url1 = url
     if "?" in url1:
         url1 = url1.split("?")[0] + "?__a=1"
         r = requests.get(url1).json()
