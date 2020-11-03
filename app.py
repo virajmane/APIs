@@ -178,6 +178,25 @@ def msg():
         count2+=1
     return jsonify(final)
 
+@app.route("/insta/", methods=["GET"])
+def instagram():
+    url = str(request.args.get("url"))
+    if "?" in url:
+        url = url.split("?")[0] + "?__a=1"
+        r = requests.get(url).json()
+        if (r["graphql"]["shortcode_media"]["is_video"] == False):
+            result = r["graphql"]["shortcode_media"]["display_url"]
+        elif (r["graphql"]["shortcode_media"]["is_video"] == True):
+            result = r["graphql"]["shortcode_media"]["video_url"]
+        else:
+            result = "Not Found"
+    else:
+        url += "?__a=1"
+        r = requests.get(url).json()
+        result = r["graphql"]["user"]["profile_pic_url_hd"]
+    final = {"url":result}
+    return jsonify(final)
+
 if __name__ == "__main__":
     #app.debug = True
     app.run(host='0.0.0.0', port=5000, use_reloader=True, threaded=True)
