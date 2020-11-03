@@ -180,18 +180,18 @@ def msg():
 
 @app.route("/insta/", methods=["GET"])
 def instagram():
-    url = str(request.args.get("url"))
-    if "?" in url:
-        url = url.split("?")[0] + "?__a=1"
-        r = requests.get(url).json()
+    url1 = str(request.args.get("url"))
+    if "?" in url1:
+        url1 = url1.split("?")[0] + "?__a=1"
+        r = requests.get(url1).json()
         if (r["graphql"]["shortcode_media"]["is_video"] == False):
             result = r["graphql"]["shortcode_media"]["display_url"]
         elif (r["graphql"]["shortcode_media"]["is_video"] == True):
             result = r["graphql"]["shortcode_media"]["video_url"]
         else:
             result = "Not Found"
-    elif "?" not in url:
-        url = url + "?__a=1"
+    elif "?" not in url1:
+        url1 = url1 + "?__a=1"
         result = r["graphql"]["user"]["profile_pic_url_hd"]
     else:
         result = "None"
