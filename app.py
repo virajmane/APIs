@@ -190,10 +190,11 @@ def instagram():
             result = r["graphql"]["shortcode_media"]["video_url"]
         else:
             result = "Not Found"
-    else:
-        url += "?__a=1"
-        r = requests.get(url).json()
+    elif "?" not in url:
+        url = url + "?__a=1"
         result = r["graphql"]["user"]["profile_pic_url_hd"]
+    else:
+        result = "None"
     return result
 
 if __name__ == "__main__":
