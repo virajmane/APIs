@@ -184,18 +184,17 @@ def msg():
 def web(methods=["GET"]):
     url = request.args.get("url")
     if "www" in url:
-    url.replace("www","")
-    if url.startswith('http'):
-      url2 = "{}.websiteoutlook.com/".format(url)
+        url.replace("www","")
+        if url.startswith('http'):
+          url2 = "{}.websiteoutlook.com/".format(url)
+        else:
+          url2 = "https://{}.websiteoutlook.com/".format(url)
     else:
-      url2 = "https://{}.websiteoutlook.com/".format(url)
-    else:
-    if url.startswith('http'):
-      url2 = "{}.websiteoutlook.com/".format(url)
-    else:
-      url2 = "https://{}.websiteoutlook.com/".format(url)
-    print(url2)
-    r = requests.get(url2, verify=False )
+        if url.startswith('http'):
+          url2 = "{}.websiteoutlook.com/".format(url)
+        else:
+          url2 = "https://{}.websiteoutlook.com/".format(url)
+    r = requests.get(url2, verify=False)
     bs = bs4.BeautifulSoup(r.text, "lxml")
     server = bs.find_all("dl", class_="dl-horizontal")
     server_info = server[1].text.split("\n")
@@ -203,12 +202,11 @@ def web(methods=["GET"]):
     df = df_list[0]
     result = {}
     for i in range(len(df)):
-    result[df[0][i]] = df[1][i]
+        result[df[0][i]] = df[1][i]
     result[server_info[1][:9]] = server_info[1][9:]
     result[server_info[2][:15]] = server_info[2][15:]
     result[server_info[3][:3]] = server_info[3][3:]
-    jsonify(result) 
-    return result
+    return jsonify(result) 
 
 if __name__ == "__main__":
     #app.debug = True
