@@ -7,3 +7,5 @@ pyDes
 bs4
 pycricbuzz
 cryptography
+pandas
+lxml
